@@ -1,4 +1,4 @@
-package cp.week9;
+package cp.week10;
 
 /**
  *
@@ -7,8 +7,6 @@ package cp.week9;
 public class Exercise11
 {
 	/*
-	- Create a Producer/Consumers program with a single producer thread that produces 5000 items.
-	- Whenever an item is produced, the producer should create and start a consumer
-	  thread that consumes the product (e.g., print it on screen).
+	- Modify Exercise10 such that a Consumer thread is created by the producer whenever 50 products are produced.
 	*/
 }

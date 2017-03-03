@@ -1,4 +1,4 @@
-package cp.week9;
+package cp.week10;
 
 /**
  *
@@ -7,9 +7,8 @@ package cp.week9;
 public class Exercise10
 {
 	/*
-	- Modify producer_consumer/BlockingQueue such that each consumer is notified
-	  of when the program terminated.
-	- Hint: Use a special class PoisonPill that extends Product and check if
-	  the product taken from the queue in the consumer is a PoisonPill.
+	- Create a Producer/Consumers program with a single producer thread that produces 5000 items.
+	- Whenever an item is produced, the producer should create and start a consumer
+	  thread that consumes the product (e.g., print it on screen).
 	*/
 }
