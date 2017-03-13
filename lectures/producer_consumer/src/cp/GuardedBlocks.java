@@ -3,6 +3,7 @@ package cp;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 /**
@@ -39,7 +40,31 @@ public class GuardedBlocks
 		} );
 	}
 	
+	private final static AtomicInteger counter = new AtomicInteger( 0 );
+	
 	private static void consume( Deque< Product > list, String threadName, CountDownLatch latch )
+	{
+		boolean keepRun = true;
+		while( keepRun ) {
+			synchronized( list ) {
+				if ( list.isEmpty() ) {
+					if ( latch.getCount() == 0 ) {
+						keepRun = false;
+					} else {
+						try {
+							list.wait();
+						} catch( InterruptedException e ) {}
+						counter.incrementAndGet();
+					}
+				} else {
+					Product prod = list.removeFirst();
+					System.out.println( threadName + " consuming " + prod.toString() );
+				}
+			}
+		}
+	}
+	
+	/* private static void consume( Deque< Product > list, String threadName, CountDownLatch latch )
 	{
 		boolean receivedNotify = false;
 		boolean keepRun = true;
@@ -63,7 +88,7 @@ public class GuardedBlocks
 				}
 			}
 		}
-	}
+	} */
 	
 	private static final int NUM_PRODUCERS = 3;
 	
@@ -73,6 +98,7 @@ public class GuardedBlocks
 		// Proposal 2: Before the producer sends the signal, it checks if a consumer is waiting.
 		
 		CountDownLatch latch = new CountDownLatch( NUM_PRODUCERS );
+		CountDownLatch latch2 = new CountDownLatch( NUM_PRODUCERS );
 		IntStream.range( 0, NUM_PRODUCERS ).forEach(
 		i -> {
 			new Thread( () -> {
@@ -81,13 +107,16 @@ public class GuardedBlocks
 			} ).start();
 			new Thread( () -> {
 				consume( THE_LIST, "Consumer" + i, latch );
+				latch2.countDown();
 			} ).start();
 		} );
 		try {
 			latch.await();
+			synchronized( THE_LIST ) {
+				THE_LIST.notifyAll();
+			}
+			latch2.await();
 		} catch( InterruptedException e ) {}
-		synchronized( THE_LIST ) {
-			THE_LIST.notifyAll();
-		}
+		System.out.println( "WASTED: " + counter.get() );
 	}
 }

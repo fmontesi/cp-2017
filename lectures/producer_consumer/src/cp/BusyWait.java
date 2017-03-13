@@ -3,6 +3,7 @@ package cp;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 /**
@@ -42,6 +43,8 @@ public class BusyWait
 		);
 	}
 	
+	private static final AtomicInteger counter = new AtomicInteger( 0 );
+	
 	private static void consume( Deque< Product > list, String threadName, CountDownLatch latch )
 	{
 //		IntStream.range( 0, 100000 ).forEach(
@@ -62,6 +65,8 @@ public class BusyWait
 					System.out.println( threadName + " consuming " + prod.toString() );
 				} else if ( latch.getCount() == 0 ) {
 					keepRun = false;
+				} else {
+					counter.incrementAndGet();
 				}
 			}
 		}
@@ -103,6 +108,7 @@ public class BusyWait
 //		c2.start();
 		
 		CountDownLatch latch = new CountDownLatch( NUM_PRODUCERS );
+		CountDownLatch latch2 = new CountDownLatch( NUM_PRODUCERS );
 		IntStream.range( 0, NUM_PRODUCERS ).forEach(
 		i -> {
 			new Thread( () -> {
@@ -111,8 +117,15 @@ public class BusyWait
 			} ).start();
 			new Thread( () -> {
 				consume( THE_LIST, "Consumer" + i, latch );
+				latch2.countDown();
 			} ).start();
 		} );
+		
+		try {
+			latch2.await();
+		} catch( InterruptedException e ) {}
+		
+		System.out.println( "Wasted cycles: " + counter.get() );
 		
 		/*
 		IntStream.range( 0, NUM_PRODUCERS ).forEach( i -> { ... } );
