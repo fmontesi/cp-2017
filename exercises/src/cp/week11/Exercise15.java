@@ -7,9 +7,10 @@ package cp.week11;
 public class Exercise15
 {
 	/*
-	- Experiment with different kinds of producer and consumer code.
-	  * Have more than 1 producer
-      * Make it so a product is a list of (random) numbers that the consumer
-	    has to sum together.
+	- Modify producers_consumers (any version of it) such that:
+      * A product is a list of 10 random numbers that the consumer
+	    has to sum together. (Hint: use Random)
+	- Apply the same change to the other versions of producers_consumers.
+		Is it hard to re-apply this change? Why?
 	*/
 }

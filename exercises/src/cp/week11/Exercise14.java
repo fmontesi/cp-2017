@@ -7,7 +7,9 @@ package cp.week11;
 public class Exercise14
 {
 	/*
-	- Experiment with different pool sizes for the fixed thread pool executor.
-	  Do they change the execution time?
+	- Modify producer_consumer/BlockingQueue such that each consumer is notified
+	  of when the program terminated.
+	- Hint: Use a special class PoisonPill that extends Product and check if
+	  the product taken from the queue in the consumer is a PoisonPill.
 	*/
 }

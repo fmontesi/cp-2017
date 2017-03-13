@@ -1,10 +1,10 @@
-package cp.week11;
+package cp.backup;
 
 /**
  *
  * @author Fabrizio Montesi <fmontesi@imada.sdu.dk>
  */
-public class Exercise13
+public class Exercise13_
 {
 	/*
 	- Modify Exercise12 such that the main thread waits for the producer
