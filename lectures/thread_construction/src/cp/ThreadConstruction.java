@@ -13,7 +13,12 @@ public class ThreadConstruction
 		}
 	}
 	
+	public interface RunnableExtended extends Runnable {
+		public void myRun();
+	}
+	
 	private static class MyRunnable implements Runnable {
+		@Override
 		public void run()
 		{
 			System.out.println( "Hello" );
@@ -35,6 +40,11 @@ public class ThreadConstruction
 		} ).start();
 		new MyThread().start();
 		new Thread( new MyRunnable() ).start();
+		new Thread( new Runnable() {
+			public void run() {
+				System.out.println( "Hello" );
+			}
+		} );
 		new Thread( ThreadConstruction::myRunMethod ).start();
 	}
 }
