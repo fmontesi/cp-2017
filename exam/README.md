@@ -7,6 +7,8 @@ on it. Everything has to be uploaded as a single zip file containing the followi
 
 Detailed instructions on the two items are given below.
 
+You can find a list of common mistakes that people do in the exam for this course in [common mistakes](https://github.com/fmontesi/cp2017/blob/master/exam/common-mistakes.md). Please read it after reading the following instructions.
+
 ## Hand-in
 
 An assignment will be opened on Blackboard for handing in the project. The deadline for uploading the project on Blackboard will be: 3 May 2017 at midnight.
@@ -67,7 +69,9 @@ I suggest that you use the [NetBeans IDE](https://netbeans.org/) to develop the 
 
 Using NetBeans is an easy way to ensure that I will be able to compile your code correctly. If the code does not compile you may automatically fail the exam, so make sure that it does!
 
+
 *IMPORTANT:*
+- You can find a directory that you can use to test your project in the directory `data_example`, located in the same directory as this readme file. The directory I will use in the evaluation will follow the same format, but it will be different.
 - You can add your own classes, but you cannot change the types of what the the
 methods take as parameters or return. You cannot change the provided
 interfaces in any way. If you do, you risk failing the exam automatically.
@@ -103,5 +107,5 @@ I will use an SSD for testing the projects.
 - What encoding will the files be in?
 UTF-8. I will not use any weird characters that require thinking of more than a Java `char`. I do not recommend using byte representations of strings.
 
-- How do I de-activate CPU cores in Linux?
+- This is useful if you want to test how your project scales with respect to the number of cores: How do I de-activate CPU cores in Linux?
 See [http://www.cyberciti.biz/faq/debian-rhel-centos-redhat-suse-hotplug-cpu/](http://www.cyberciti.biz/faq/debian-rhel-centos-redhat-suse-hotplug-cpu/).
