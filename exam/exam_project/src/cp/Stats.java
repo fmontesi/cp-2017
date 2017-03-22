@@ -36,5 +36,5 @@ public interface Stats
 	 * one that contains numbers whose sum is the smallest (first of the list)
 	 * to the one that contains numbers whose sum is the greatest (last of the list).
 	 */
-	public List< Path > byOccurrences();
+	public List< Path > byTotals();
 }

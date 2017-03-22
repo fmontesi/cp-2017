@@ -16,9 +16,5 @@ public interface Result
 	 */
 	public Path path();
 	
-	/**
-	 * The sum of all numbers found in this file
-	 * @return sum of all numbers found in this file
-	 */
-	public int sum();
+	public int number();
 }
