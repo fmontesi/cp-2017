@@ -1,31 +1,32 @@
 package cp;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 /**
  *
  * @author Fabrizio Montesi <fmontesi@imada.sdu.dk>
  */
-public class ExecutorProducersConsumers
+public class VeryComplexWithoutSubmitExecutorProducersConsumers
 {
 	private static class Product {
-		private final String name;
-		private final String attributes;
-		public Product( String name, String attributes )
+		private final List< Integer > ints;
+		public Product( List< Integer > ints )
 		{
-			this.name = name;
-			this.attributes = attributes;
+			this.ints = ints;
 		}
 		
-		public String toString()
+		public List< Integer > ints()
 		{
-			return name + ". " + attributes;
+			return ints;
 		}
 	}
 	
@@ -34,23 +35,34 @@ public class ExecutorProducersConsumers
 	private static void produce( BlockingDeque< Product > list, String threadName, ExecutorService executor )
 	{
 		IntStream.range( 1, 2000 ).forEach( i -> {
-				Product prod = new Product( "Water Bottle", "Liters: " + i + ". By thread: " + threadName );
+//				List< Integer > list = new ArrayList< Integer > ();
+//				list.add( i );
+//				list.add( i + 1 );
+//				list.add( i + 2 );
+//				list.add( i + 3 );
+				Product prod = new Product( Arrays.asList( i, i + 1, i + 2, i + 3 ) );
 				list.add( prod );
+				AtomicInteger total = new AtomicInteger();
+				CountDownLatch latch = new CountDownLatch( 1 );
 				executor.submit( () -> {
-					consume( THE_LIST, "Consumer" + i );
+					consume( THE_LIST, "Consumer" + i, total, latch );
 				} );
-//				new Thread( () -> {
-//					consume( THE_LIST, "Consumer" + i );
-//				} ).start();
-				//System.out.println( threadName + " producing " + prod );
+				try {
+					latch.await();
+				} catch( InterruptedException e ) {}
+				System.out.println( "Total: " + total.get() );
 		} );
 	}
 	
-	private static void consume( BlockingDeque< Product > list, String threadName )
+	private static void consume( BlockingDeque< Product > list, String threadName, AtomicInteger total, CountDownLatch latch )
 	{
 		try {
 			Product prod = list.takeFirst();
-			//System.out.println( threadName + " consuming " + prod.toString() );
+			total.set( 0 );
+			for( Integer i : prod.ints() ) {
+				total.addAndGet( i );
+			}
+			latch.countDown();
 		} catch( InterruptedException e ) {}
 	}
 	
@@ -58,7 +70,7 @@ public class ExecutorProducersConsumers
 	
 	public static void run()
 	{
-		ExecutorService executor = Executors.newFixedThreadPool( Runtime.getRuntime().availableProcessors() + 1 );
+		ExecutorService executor = Executors.newFixedThreadPool( 3 );
 		CountDownLatch latch = new CountDownLatch( NUM_PRODUCERS );
 		
 		// Proposal 1: Before the consumer waits, it checks if something is in the list.

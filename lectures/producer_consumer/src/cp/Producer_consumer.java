@@ -14,7 +14,7 @@ public class Producer_consumer
 		// BlockingQueue.run();
 		// Delivery.run();
 		// ConveyorBelt.run();
-		doAndMeasure(
+		/* doAndMeasure(
 			"1 Thread per Consumer",
 			() -> OneThreadEachProducersConsumers.run()
 		);
@@ -29,6 +29,16 @@ public class Producer_consumer
 		doAndMeasure(
 			"Executors",
 			() -> ExecutorProducersConsumers.run()
+		);*/
+		
+		/* doAndMeasure(
+			"Executors",
+			() -> SubmitExecutorProducersConsumers.run()
+		); */
+		
+		doAndMeasure(
+			"Executors",
+			() -> CountOccurrencesExecutor.run()
 		);
 	}
 	

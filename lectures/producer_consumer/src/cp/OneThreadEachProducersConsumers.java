@@ -49,22 +49,22 @@ public class OneThreadEachProducersConsumers
 	}
 	
 	private static final int NUM_PRODUCERS = 3;
-	private static final CountDownLatch LATCH = new CountDownLatch( NUM_PRODUCERS );
 	
 	public static void run()
 	{
+		CountDownLatch latch = new CountDownLatch( NUM_PRODUCERS );
 		// Proposal 1: Before the consumer waits, it checks if something is in the list.
 		// Proposal 2: Before the producer sends the signal, it checks if a consumer is waiting.
 		IntStream.range( 0, NUM_PRODUCERS ).forEach(
 		i -> {
 			new Thread( () -> {
 				produce( THE_LIST, "Producer" + i );
-				LATCH.countDown();
+				latch.countDown();
 			} ).start();
 		} );
 		
 		try {
-			LATCH.await();
+			latch.await();
 		} catch( InterruptedException e ) {}
 	}
 }
